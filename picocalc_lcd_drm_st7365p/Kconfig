@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+config PICOCALC_LCD_DRM_ST7365P
+	tristate "PicoCalc TinyDRM LCD driver (ST7365P)"
+	depends on DRM && DRM_KMS_HELPER && DRM_MIPI_DBI && SPI
+	depends on BACKLIGHT_CLASS_DEVICE || BACKLIGHT_CLASS_DEVICE=n
+	select DRM_GEM_DMA_HELPER
+	help
+	  Enable the TinyDRM-based driver for PicoCalc units fitted with a
+	  Sitronix ST7365P SPI panel instead of the Ilitek ILI9488. This
+	  provides a DRM/KMS interface (via mipi-dbi) so userspace can use
+	  the kmsdrm backend instead of the legacy framebuffer driver.
+
+	  Only one of PICOCALC_LCD_DRM and PICOCALC_LCD_DRM_ST7365P will bind
+	  at runtime, selected by the panel node's compatible string.

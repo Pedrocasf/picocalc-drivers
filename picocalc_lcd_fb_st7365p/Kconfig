@@ -1,0 +1,9 @@
+# SPDX-License-Identifier: GPL-2.0
+config PICOCALC_LCD_FB_ST7365P
+    tristate "Picocalc screen support, ST7365P panel (fbdev)"
+    depends on SPI
+    help
+
+      Say Y or M here if you want to use the picocalc lcd screen with a framebuffer only driver on units fitted with a Sitronix ST7365P panel instead of the Ilitek ILI9488. The module will be called st7365p_fb.
+
+      Only one of PICOCALC_LCD_FB and PICOCALC_LCD_FB_ST7365P will bind at runtime, selected by the panel node's compatible string.

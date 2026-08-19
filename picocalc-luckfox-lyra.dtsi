@@ -75,16 +75,49 @@
 	};
 };
 
+/*
+ * spi-rockchip switches to a "high_speed" pinctrl state above 24MHz to drive
+ * the pads harder. The rm_io*_spi0_* groups in rk3506-pinctrl-rmio.dtsi only
+ * provide the default state at drive level 3, so the high speed variant is
+ * spelled out here: same pins and same RMIO mux values, two levels stronger.
+ * Back this off if the bus shows overshoot at the top of its range.
+ */
+&pinctrl {
+	spi0_hs {
+		spi0_pins_hs: spi0-pins-hs {
+			rockchip,pins =
+				<0 RK_PA4 85 &pcfg_pull_none_drv_level_5>,
+				<0 RK_PA5 84 &pcfg_pull_none_drv_level_5>,
+				<0 RK_PA6 83 &pcfg_pull_none_drv_level_5>,
+				<0 RK_PA7 82 &pcfg_pull_none_drv_level_5>;
+		};
+	};
+};
+
 &spi0 {
 	status = "okay";
-	pinctrl-names = "default";
+	pinctrl-names = "default", "high_speed";
 	pinctrl-0 = <&rm_io4_spi0_csn0 &rm_io5_spi0_miso &rm_io6_spi0_mosi &rm_io7_spi0_clk>;
+	pinctrl-1 = <&spi0_pins_hs>;
 	num-cs = <1>;
+
+	/*
+	 * SCLK is this clock divided by an even value of at least 2, so 200MHz
+	 * puts the ceiling at 100MHz. Left to the bootloader the divider is
+	 * whatever it happened to be.
+	 */
+	assigned-clocks = <&cru CLK_SPI0>;
+	assigned-clock-rates = <200000000>;
 
 	ili9488: ili9488@0 {
 		status = "okay";
 		compatible = "picocalc,spilcd", "ilitek,ili9488";
-		spi-max-frequency = <80000000>;
+		/*
+		 * Stock spi-rockchip clamps anything above 50MHz (MAX_SCLK_OUT);
+		 * kernel-patches/0001 lifts that to 100MHz. Left at 50MHz here
+		 * because this panel has not been characterised any higher.
+		 */
+		spi-max-frequency = <50000000>;
 		reg = <0>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&ili9488_pins>;

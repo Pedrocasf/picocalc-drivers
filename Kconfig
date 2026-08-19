@@ -11,6 +11,8 @@ if STAGING_PICOCALC
 source "drivers/staging/picocalc/picocalc_kbd/Kconfig"
 source "drivers/staging/picocalc/picocalc_lcd_fb/Kconfig"
 source "drivers/staging/picocalc/picocalc_lcd_drm/Kconfig"
+source "drivers/staging/picocalc/picocalc_lcd_fb_st7365p/Kconfig"
+source "drivers/staging/picocalc/picocalc_lcd_drm_st7365p/Kconfig"
 source "drivers/staging/picocalc/picocalc_snd-pwm/Kconfig"
 source "drivers/staging/picocalc/picocalc_snd-softpwm/Kconfig"
 source "drivers/staging/picocalc/picocalc_mfd/Kconfig"

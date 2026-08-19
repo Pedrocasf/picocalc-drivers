@@ -68,6 +68,8 @@ jobs:
         scripts/config --module CONFIG_PICOCALC_KBD
         scripts/config --module CONFIG_PICOCALC_LCD_FB
         scripts/config --module CONFIG_PICOCALC_LCD_DRM
+        scripts/config --module CONFIG_PICOCALC_LCD_FB_ST7365P
+        scripts/config --module CONFIG_PICOCALC_LCD_DRM_ST7365P
         scripts/config --module CONFIG_PICOCALC_SND_PWM
         scripts/config --module CONFIG_PICOCALC_SND_SOFT_PWM
         scripts/config --module CONFIG_PICOCALC_MFD

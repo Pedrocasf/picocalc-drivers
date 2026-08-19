@@ -1,12 +1,15 @@
 # SPDX-License-Identifier: GPL-2.0
 
 # List of driver subdirectories. Keep names in sync with repo layout.
-SUBDIRS := picocalc_kbd picocalc_lcd_fb picocalc_lcd_drm picocalc_snd-pwm picocalc_snd-softpwm \
+SUBDIRS := picocalc_kbd picocalc_lcd_fb picocalc_lcd_drm picocalc_lcd_fb_st7365p \
+		   picocalc_lcd_drm_st7365p picocalc_snd-pwm picocalc_snd-softpwm \
 		   picocalc_mfd picocalc_mfd_bms picocalc_mfd_bkl picocalc_mfd_kbd picocalc_mfd_led
 
 obj-$(CONFIG_PICOCALC_KBD)     += picocalc_kbd/
 obj-$(CONFIG_PICOCALC_LCD_FB)  += picocalc_lcd_fb/
 obj-$(CONFIG_PICOCALC_LCD_DRM) += picocalc_lcd_drm/
+obj-$(CONFIG_PICOCALC_LCD_FB_ST7365P)  += picocalc_lcd_fb_st7365p/
+obj-$(CONFIG_PICOCALC_LCD_DRM_ST7365P) += picocalc_lcd_drm_st7365p/
 obj-$(CONFIG_PICOCALC_SND_PWM)     += picocalc_snd-pwm/
 obj-$(CONFIG_PICOCALC_SND_SOFT_PWM)     += picocalc_snd-softpwm/
 obj-$(CONFIG_PICOCALC_MFD)     += picocalc_mfd/

@@ -1,0 +1,49 @@
+/dts-v1/;
+/plugin/;
+
+/*
+ * Device tree overlay for PicoCalc units fitted with a Sitronix ST7365P panel
+ *
+ * The stock device tree describes the panel as an Ilitek ILI9488. Later
+ * PicoCalc batches ship an ST7365P instead, which needs the ST7365P driver
+ * (st7365p_drm or st7365p_fb) rather than the ILI9488 one. This overlay
+ * repoints the existing panel node's compatible string, leaving the GPIO,
+ * backlight and pinctrl properties from the base device tree in place.
+ *
+ * It also raises spi-max-frequency. The ST7365P accepts RGB565 directly over
+ * SPI, so a full 320x320 frame is 200KiB: roughly 33ms of bus time at 50MHz
+ * and 16ms at 100MHz, which is the difference between about 30 and 60 fps for
+ * a full-screen update.
+ *
+ * 100MHz needs both halves of the stack. The reachable SCLK is half the spi0
+ * functional clock, which the base device tree pins at 200MHz, and stock
+ * spi-rockchip clamps to 50MHz regardless (MAX_SCLK_OUT) until
+ * kernel-patches/0001 is applied. Without that patch this node still works,
+ * it just runs at 50MHz.
+ *
+ * Nothing above 50MHz has been verified on hardware. If the display tears,
+ * speckles or fails to sync, drop this back to 50000000 -- or find the real
+ * limit first with the driver's spi_speed_hz / p_spi_speed_hz module
+ * parameter, which overrides this value without reflashing a device tree.
+ *
+ * To apply this overlay at runtime:
+ *   mkdir -p /sys/kernel/config/device-tree/overlays/st7365p
+ *   cat /boot/devicetree/st7365p-lcd.dtbo > /sys/kernel/config/device-tree/overlays/st7365p/dtbo
+ *   echo 1 > /sys/kernel/config/device-tree/overlays/st7365p/status
+ *
+ * To remove:
+ *   echo 0 > /sys/kernel/config/device-tree/overlays/st7365p/status
+ *   rmdir /sys/kernel/config/device-tree/overlays/st7365p
+ */
+
+/ {
+    compatible = "rockchip,rk3506";
+
+    fragment@0 {
+        target = <&ili9488>;
+        __overlay__ {
+            compatible = "picocalc,st7365p", "sitronix,st7365p";
+            spi-max-frequency = <100000000>;
+        };
+    };
+};
